@@ -24,6 +24,8 @@ function jb_require_plugin_file(){
         define( 'JB_DOMAIN', 'jb_provider' );
     }
     add_action( 'wp_enqueue_scripts', 'jb_plugin_enqueue_scripts' );
+    require_once dirname(__FILE__) . '/template.php';
+
 }
 add_action('after_setup_theme', 'jb_require_plugin_file');
 /**
@@ -46,3 +48,17 @@ function jb_plugin_enqueue_scripts(){
         'backbone'),
         '1.0', true);
 }
+/**
+ * add more template to plugin
+ *
+ * @param void
+ * @return void
+ * @since 1.0
+ * @package JBPLUGIN
+ * @category void
+ * @author JACK BUI
+ */
+function jb_add_template(){
+    
+}
+add_action("wp_footer", 'jb_add_template');
