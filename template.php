@@ -1,5 +1,15 @@
 <?php
 if( !function_exists('inforwindowTemplate') ){
+    /**
+     * inforwindow
+     *
+     * @param void
+     * @return void
+     * @since 1.0
+     * @package JBPLUGIN
+     * @category void
+     * @author JACK BUI
+     */
    function inforwindowTemplate(){
         $template = '<div class="infowindow" ><div class="post-item"><div class="place-wrapper">
             <a href="{{= permalink }}" class="img-place">
@@ -15,3 +25,16 @@ if( !function_exists('inforwindowTemplate') ){
         echo '<div class="map-element" style="display:none"></div>';
     }
 }
+/**
+ * jb_map_shortcode
+ *
+ * @param void
+ * @return void
+ * @since 1.0
+ * @package JBPLUGIN
+ * @category void
+ * @author JACK BUI
+ */
+function jb_map_shortcode(){ ?>
+    <div id="map-top-wrapper"></div>
+<?php }

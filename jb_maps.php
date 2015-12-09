@@ -59,6 +59,20 @@ function jb_plugin_enqueue_scripts(){
  * @author JACK BUI
  */
 function jb_add_template(){
-    
+    inforwindowTemplate();
 }
 add_action("wp_footer", 'jb_add_template');
+/**
+ * add short code to display map
+ *
+ * @param void
+ * @return void
+ * @since 1.0
+ * @package JBPLUGIN
+ * @category void
+ * @author JACK BUI
+ */
+function jb_add_shortcode(  ) {
+    jb_map_shortcode();
+}
+add_shortcode( 'footag', 'footag_func' );

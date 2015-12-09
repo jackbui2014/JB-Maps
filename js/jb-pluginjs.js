@@ -8,6 +8,6 @@
         }
     });
     $(document).ready(function() {
-
+        new Map();
     });
     })(jQuery, Backbone);
