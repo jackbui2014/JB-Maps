@@ -75,4 +75,4 @@ add_action("wp_footer", 'jb_add_template');
 function jb_add_shortcode(  ) {
     jb_map_shortcode();
 }
-add_shortcode( 'footag', 'footag_func' );
+add_shortcode( 'jb_map', 'jb_add_shortcode' );

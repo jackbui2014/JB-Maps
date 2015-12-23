@@ -21,7 +21,7 @@ if( !function_exists('inforwindowTemplate') ){
                 <div class="rate-it" data-score="{{= rating_score }}"></div>
             </div>
         </div></div></div>';
-        echo '<script type="text/template" id="ae_info_content_template">' . apply_filters('jb_admap_template', $template) . '</script>';
+        echo '<script type="text/template" id="jb_info_content_template">' . apply_filters('jb_add_map_template', $template) . '</script>';
         echo '<div class="map-element" style="display:none"></div>';
     }
 }
@@ -36,5 +36,5 @@ if( !function_exists('inforwindowTemplate') ){
  * @author JACK BUI
  */
 function jb_map_shortcode(){ ?>
-    <div id="map-top-wrapper"></div>
+    <div id="map-wrapper">sssssssssssssssssssssssssssssss</div>
 <?php }
