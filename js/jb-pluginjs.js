@@ -4,7 +4,7 @@
         events: {},
         // initialize view
         initialize: function (options) {
-            _.bindAll(this, 'setCenter');
+           // _.bindAll(this, 'setCenter');
             var view = this;
             if ($('#map-wrapper').length === 0) {
                 return;
@@ -35,7 +35,7 @@
             if ($('#nearby_location').length > 0) {
                 this.nearby = true;
             }
-            view.blockUi = new Views.BlockUi();
+            //view.blockUi = new Views.BlockUi();
         },
         initMapWindow : function() {
             var view = this,
@@ -93,37 +93,18 @@
             view.labelAnchor = new google.maps.Point(10, 31);
         },
         renderMap: function(data) {
-            var view = this,
-                data = {
-                    action: 'jb_get_map_data'
-                };
+            var view = this;
             view.markers = [];
             /**
              * ajax request get all place on map
              */
-            if ($('.main-pagination').length > 0) {
-                var query = JSON.parse($('.main-pagination .ae_query').html());
-                data.query = query;
-            }
-            var i = 100,
-                k = 1;
-            current_place = Array();
-            if ($('#total_place').length > 0) {
-                i = JSON.parse($('#total_place').html());
-                current_place = Array(i.2);
-                i = i.number;
-            }
-            var cat = '';
-            if ($('#place_cat_slug').length > 0) {
-                cat = JSON.parse($('#place_cat_slug').html());
-                cat = cat.slug;
-            }
 
-            data.paged = k;
-            data.showposts = 50;
-            data.place_category = cat;
             //if(ae_globals.is_single && ae_globals.single_map_marker === "1"){
-                data = current_place;
+                data =  [{
+                    latitude: '14.058324',
+                    longitude: '108.277199',
+                    action: 'jb_get_map_data'
+                }];
                 view.ajaxSuccess(data);
             //}
             //else{
@@ -148,7 +129,9 @@
         ajaxSuccess: function(data) {
             var view = this;
             var bounds = new google.maps.LatLngBounds();
+            console.log(data.length);
             for (var i = 0; i < data.length; i++) {
+                console.log('vaooo');
                 var content = '',
                 // place latitude and longitude
                     latLng = new google.maps.LatLng(data[i].latitude, data[i].longitude),
@@ -177,8 +160,8 @@
                 var marker = new MarkerWithLabel({
                     position: latLng,
                     // label by place category color and icon class
-                    labelContent: "<span><i style='color:" + color + ";' class='fa " + fontClass + "'></i><span>",
-                    labelAnchor: view.labelAnchor,
+                    labelContent: "<span><i></i><span>",
+                    labelAnchor: 'test lable',
                     labelClass: "map-labels", // the CSS class for the label
                     labelStyle: {
                         opacity: 1.0
@@ -186,38 +169,38 @@
                     icon: icon
                 });
                 // set marker content using in multichoice
-                marker.content = '';
+                marker.content = 'test';
                 marker.ID = data[i].ID;
                 view.markers.push(marker);
                 // attach info window
                 view.attachMarkerInfowindow(marker, content, data[i]);
-                if (typeof view.model !== 'undefined' && view.model.get('ID') == data[i]['ID'] && !ae_globals.is_search) {
-                    var model_data = view.model.toJSON(),
-                        content = view.template(model_data);
-
+                //if (typeof view.model !== 'undefined' && view.model.get('ID') == data[i]['ID'] ) {
+                    // var model_data = view.model.toJSON(),
+                    //     content = view.template(model_data);
+                    content= 'test';
                     marker.content = content;
                     view.map.setCenter(latLng);
                     /**
                      * set content for info window
                      */
-                    view.infoWindow.setContent(content);
+                    //view.infoWindow.setContent(content);
                     // set border color for info window
-                    view.infoWindow.setBorderColor(color);
+                    //view.infoWindow.setBorderColor(color);
                     // open info window
                     view.infoWindow.open(this.map, marker);
-                    view.map.setZoom(15);
+                    view.map.setZoom(10);
                     google.maps.event.addListener(view.map,'idle',function(){
                         // display rating on map after the map is loaded
-                        $('.infowindow .rate-it').raty({
-                            readOnly: true,
-                            half: true,
-                            score: function() {
-                                return $(this).attr('data-score');
-                            },
-                            hints: raty.hint
-                        });
+                        // $('.infowindow .rate-it').raty({
+                        //     readOnly: true,
+                        //     half: true,
+                        //     score: function() {
+                        //         return $(this).attr('data-score');
+                        //     },
+                        //     hints: raty.hint
+                        // });
                     });
-                }
+                //}
             }
 
             // init map cluster
@@ -229,16 +212,81 @@
             view.markerCluster.onClick = function(icon) {
                 return view.multiChoice(icon.cluster_);
             };
-            if (typeof view.model === 'undefined' && parseInt(ae_globals.fitbounds)) {
-                //  Fit these bounds to the map
-                view.map.fitBounds(bounds);
-            }
-            if (ae_globals.is_search && parseInt(ae_globals.fitbounds)){
-                view.map.fitBounds(bounds);
-            }
+            // if (typeof view.model === 'undefined' && parseInt(ae_globals.fitbounds)) {
+            //     //  Fit these bounds to the map
+            //     view.map.fitBounds(bounds);
+            // }
+            // if (ae_globals.is_search && parseInt(ae_globals.fitbounds)){
+            //     view.map.fitBounds(bounds);
+            // }
+        },
+        /**
+         * attach info window to a marker
+         * @param marker google marker object
+         * @param content the info window content
+         * @param data object data
+         */
+        attachMarkerInfowindow: function(marker, content, data) {
+            var view = this,
+                term = data.term_taxonomy_id;
+            google.maps.event.addListener(marker, 'click', function() {
+                if(marker.content === '') {
+                    $.ajax({
+                        type: 'get',
+                        url: ae_globals.ajaxURL,
+                        data: {action : 'de-get-map-info', ID : marker.ID},
+                        beforeSend: function() {
+                            view.blockUi.block($('#map-top-wrapper'));
+                        },
+                        success: function(resp) {
+                            view.blockUi.unblock();
+                            $('div.map-element').html(resp.data.content);
+                            var content = $('div.map-element').html();
+                            /**
+                             * set content for info window
+                             */
+                            view.infoWindow.setContent(content);
+                            // set border color for info window
+                            var color = view.colors[term];
+                            if (typeof color === 'undefined') {
+                                color = '#F59236';
+                            }
+                            view.infoWindow.setBorderColor(color);
+                            // open info window
+                            view.infoWindow.open(view.map, marker);
+                            marker.content = content;
+
+                        }
+                    });
+                }else {
+                    view.infoWindow.setContent(marker.content);
+                    // set border color for info window
+                    var color = view.colors[term];
+                    if (typeof color === 'undefined') {
+                        color = '#F59236';
+                    }
+                    $('.rate-it').raty({
+                        readOnly: true,
+                        half: true,
+                        score: function() {
+                            return $(this).attr('data-score');
+                        },
+                        hints: raty.hint
+                    });
+
+                    view.infoWindow.setBorderColor(color);
+                    // open info window
+                    view.infoWindow.open(view.map, marker);
+                }
+            });
         },
     });
     $(document).ready(function() {
-        new Map();
+        new Map({
+                                el: $('body'),
+                                latitude: '10.823099',
+                                longitude: '106.629664',
+                                //model : post
+                            });
     });
     })(jQuery, Backbone);

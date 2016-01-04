@@ -40,6 +40,8 @@ add_action('after_setup_theme', 'jb_require_plugin_file');
  */
 function jb_plugin_enqueue_scripts(){
     wp_enqueue_style('jb_plugin_css', plugin_dir_url(__FILE__) . 'css/jb-plugincss.css', array(), '1.0');
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('backbone');
     wp_enqueue_script('jb-googlemap-api', '//maps.googleapis.com/maps/api/js?sensor=false&signed_in=false', '3.0', true);
     wp_enqueue_script('gmaps', plugin_dir_url(__FILE__) . 'js/gmaps.min.js', array('jb-googlemap-api'), '1.0', true);
     wp_enqueue_script('marker', plugin_dir_url(__FILE__) . 'js/marker.js', array('gmaps'), '1.0', true);
