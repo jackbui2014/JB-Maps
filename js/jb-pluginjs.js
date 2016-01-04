@@ -187,6 +187,7 @@
                     // set border color for info window
                     //view.infoWindow.setBorderColor(color);
                     // open info window
+
                     view.infoWindow.open(this.map, marker);
                     view.map.setZoom(10);
                     google.maps.event.addListener(view.map,'idle',function(){
@@ -230,6 +231,7 @@
             var view = this,
                 term = data.term_taxonomy_id;
             google.maps.event.addListener(marker, 'click', function() {
+                marker.content = 'slfjlsfjlsfjl sldfjslf';
                 if(marker.content === '') {
                     $.ajax({
                         type: 'get',
@@ -259,22 +261,23 @@
                         }
                     });
                 }else {
+                    console.log('neeeee');
                     view.infoWindow.setContent(marker.content);
                     // set border color for info window
-                    var color = view.colors[term];
-                    if (typeof color === 'undefined') {
-                        color = '#F59236';
-                    }
-                    $('.rate-it').raty({
-                        readOnly: true,
-                        half: true,
-                        score: function() {
-                            return $(this).attr('data-score');
-                        },
-                        hints: raty.hint
-                    });
+                    // var color = view.colors[term];
+                    // if (typeof color === 'undefined') {
+                    //     color = '#F59236';
+                    // }
+                    // $('.rate-it').raty({
+                    //     readOnly: true,
+                    //     half: true,
+                    //     score: function() {
+                    //         return $(this).attr('data-score');
+                    //     },
+                    //     hints: raty.hint
+                    // });
 
-                    view.infoWindow.setBorderColor(color);
+                    // view.infoWindow.setBorderColor(color);
                     // open info window
                     view.infoWindow.open(view.map, marker);
                 }
