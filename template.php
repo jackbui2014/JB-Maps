@@ -37,4 +37,5 @@ if( !function_exists('inforwindowTemplate') ){
  */
 function jb_map_shortcode(){ ?>
     <div id="map-wrapper">sssssssssssssssssssssssssssssss</div>
+   
 <?php }
